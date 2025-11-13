@@ -1,0 +1,27 @@
+name: "Update a dependabot secret from GitHub Actions"
+description: "Update a dependabot secret in a GitHub Actions build environment"
+author: "Lee Briggs"
+
+inputs:
+  token:
+    description: "GitHub token with permissions to update Dependabot secrets"
+    required: true
+  owner:
+    description: "Repository owner"
+    required: true
+  repo:
+    description: "Repository name"
+    required: true
+  secret_name:
+    description: "Name of the Dependabot secret to update"
+    required: true
+  secret_value:
+    description: "Value of the secret to set"
+    required: true
+
+branding:
+  icon: "archive"
+  color: "green"
+runs:
+  using: "node20"
+  main: "lib/main.js"

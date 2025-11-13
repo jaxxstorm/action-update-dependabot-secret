@@ -1,0 +1,132 @@
+name: "Integration Tests"
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - "releases/*"
+
+# Note: The default GITHUB_TOKEN does not have the 'dependabot_secrets' permission.
+# You need to provide a token with this permission (PAT or GitHub App token).
+# Add a repository secret named DEPENDABOT_SECRETS_TOKEN with the required permissions.
+# See: https://docs.github.com/en/rest/dependabot/secrets
+
+jobs:
+  # Test updating a Dependabot secret on Ubuntu
+  test-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build action
+        run: npm run build
+      
+      - name: Test action - Update test secret
+        uses: ./
+        with:
+          token: ${{ secrets.DEPENDABOT_SECRETS_TOKEN }}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          secret_name: TEST_SECRET
+          secret_value: ${{ github.sha }}-ubuntu-${{ github.run_id }}
+
+  # Test updating a Dependabot secret on macOS
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build action
+        run: npm run build
+      
+      - name: Test action - Update test secret
+        uses: ./
+        with:
+          token: ${{ secrets.DEPENDABOT_SECRETS_TOKEN }}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          secret_name: TEST_SECRET
+          secret_value: ${{ github.sha }}-macos-${{ github.run_id }}
+
+  # Test updating a Dependabot secret on Windows
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build action
+        run: npm run build
+      
+      - name: Test action - Update test secret
+        uses: ./
+        with:
+          token: ${{ secrets.DEPENDABOT_SECRETS_TOKEN }}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          secret_name: TEST_SECRET
+          secret_value: ${{ github.sha }}-windows-${{ github.run_id }}
+
+  # Test with different secret values to ensure encryption works correctly
+  test-multiple-secrets:
+    strategy:
+      matrix:
+        secret:
+          - name: TEST_SECRET_1
+            value: "simple-value"
+          - name: TEST_SECRET_2
+            value: "value-with-special-chars-!@#$%"
+          - name: TEST_SECRET_3
+            value: "multi\nline\nvalue"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build action
+        run: npm run build
+      
+      - name: Test action - Update ${{ matrix.secret.name }}
+        uses: ./
+        with:
+          token: ${{ secrets.DEPENDABOT_SECRETS_TOKEN }}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          secret_name: ${{ matrix.secret.name }}
+          secret_value: ${{ matrix.secret.value }}
