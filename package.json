@@ -16,7 +16,7 @@
   "author": "Lee Briggs",
   "license": "Apache-2.0",
   "dependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^2.0.0",
     "@octokit/core": "^7.0.6",
     "libsodium-wrappers": "^0.7.15",
     "tweetnacl": "^1.0.3",
