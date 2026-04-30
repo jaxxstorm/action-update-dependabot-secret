@@ -18,13 +18,13 @@
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@octokit/core": "^7.0.6",
-    "libsodium-wrappers": "^0.7.15",
+    "libsodium-wrappers": "^0.8.0",
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/libsodium-wrappers": "^0.7.14",
+    "@types/libsodium-wrappers": "^0.8.0",
     "@types/lodash": "4.17.18",
     "@types/node": "20.17.6",
     "@vercel/ncc": "0.38.3",
